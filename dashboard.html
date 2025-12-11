@@ -3,53 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Sistema de Invitados</title>
+    <title>Dashboard - Invitados</title>
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        body { padding: 20px; font-family: Arial; }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            max-width: 700px;
+        }
+        input, select, button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            margin-bottom: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        img {
+            width: 90px;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
 
-    <header class="top-bar">
-        <h1>Panel de Invitados</h1>
-    </header>
+    <h1>Gestión de Invitados</h1>
 
-    <main class="container">
+    <!-- FORMULARIO -->
+    <div class="card">
+        <h2>Agregar invitado</h2>
 
-        <!-- FORMULARIO PARA AGREGAR INVITADOS -->
-        <section class="card">
-            <h2>Agregar Invitado</h2>
+        <form id="formInvitado">
+            <label>Nombre completo</label>
+            <input type="text" id="nombre" required>
 
-            <form id="formInvitado">
-                <label>Nombre completo:</label>
-                <input type="text" id="nombreInvitado" required>
+            <label>Tipo de invitado</label>
+            <select id="tipo">
+                <option value="INVITADO">INVITADO</option>
+                <option value="PROMOCIONADO">PROMOCIONADO</option>
+            </select>
 
-                <label>Estado:</label>
-                <select id="estadoInvitado">
-                    <option value="INVITADO">INVITADO</option>
-                    <option value="PROMOCIONADO">PROMOCIONADO</option>
-                </select>
+            <button type="submit">Agregar invitado</button>
+        </form>
+    </div>
 
-                <button type="submit">Agregar</button>
-            </form>
-        </section>
+    <!-- TABLA -->
+    <div class="card">
+        <h2>Lista de invitados</h2>
 
-        <!-- LISTA DE INVITADOS -->
-        <section class="card">
-            <h2>Lista de Invitados</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                    <th>QR</th>
+                </tr>
+            </thead>
+            <tbody id="listaInvitados"></tbody>
+        </table>
+    </div>
 
-            <table id="tablaInvitados">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Estado</th>
-                        <th>QR</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </section>
 
-    </main>
+    <script>
+        const listaInvitados = JSON.parse(localStorage.getItem("invitados")) || [];
 
-    <script src="app.js"></script>
+        function guardar() {
+            localStorage.setItem("invitados", JSON.stringify(listaInvitados));
+        }
+
+        function render() {
+            const tabla = document.getElementById("listaInvitados");
+            tabla.innerHTML = "";
+
+            listaInvitados.forEach(inv => {
+                const tr = document.createElement("tr");
+
+                tr.innerHTML = `
+                    <td>${inv.nombre}</td>
+                    <td>${inv.tipo}</td>
+                    <td><img src="${inv.qr}"></td>
+                `;
+
+                tabla.appendChild(tr);
+            });
+        }
+
+        function generarQR(texto) {
+            return `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(texto)}`;
+        }
+
+        document.getElementById("formInvitado").addEventListener("submit", e => {
+            e.preventDefault();
+
+            const nombre = document.getElementById("nombre").value.trim();
+            const tipo = document.getElementById("tipo").value;
+            const qr = generarQR(nombre);
+
+            listaInvitados.push({ nombre, tipo, qr });
+            guardar();
+            render();
+
+            e.target.reset();
+        });
+
+        render();
+    </script>
+
 </body>
 </html>
