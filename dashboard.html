@@ -31,7 +31,6 @@
         th, td {
             border: 1px solid #ccc;
             padding: 8px;
-            text-align: left;
         }
         img {
             width: 90px;
@@ -43,7 +42,8 @@
 
     <h1>Gestión de Invitados</h1>
 
-    <!-- FORMULARIO -->
+    <a href="tarjetas.html">📄 Ver Tarjetas</a>
+
     <div class="card">
         <h2>Agregar invitado</h2>
 
@@ -61,7 +61,6 @@
         </form>
     </div>
 
-    <!-- TABLA -->
     <div class="card">
         <h2>Lista de invitados</h2>
 
@@ -76,7 +75,6 @@
             <tbody id="listaInvitados"></tbody>
         </table>
     </div>
-
 
     <script>
         const listaInvitados = JSON.parse(localStorage.getItem("invitados")) || [];
