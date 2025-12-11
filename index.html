@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Login - Sistema de Invitados</title>
+<style>
+body{font-family:Arial;background:#f1f1f1;display:flex;justify-content:center;align-items:center;height:100vh;margin:0;}
+.card{background:white;padding:40px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.15);width:320px;text-align:center;}
+input{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ccc;}
+button{width:100%;padding:12px;background:#0A0A0A;color:white;border:none;border-radius:8px;cursor:pointer;font-size:16px;}
+button:hover{opacity:0.85;}
+.error{color:red;margin-top:10px;}
+</style>
+</head>
+<body>
+<div class="card">
+<h2>Acceso</h2>
+<input id="user" placeholder="Usuario">
+<input id="pass" type="password" placeholder="Contraseña">
+<button onclick="login()">Ingresar</button>
+<p id="msg" class="error"></p>
+</div>
+
+<script>
+function login(){
+ let u=document.getElementById("user").value.trim();
+ let p=document.getElementById("pass").value.trim();
+ if(u==="jesusandia124" && p==="andia124"){
+   window.location.href="dashboard.html";
+ } else {
+   document.getElementById("msg").innerText="Credenciales incorrectas";
+ }
+}
+</script>
+</body>
+</html>
